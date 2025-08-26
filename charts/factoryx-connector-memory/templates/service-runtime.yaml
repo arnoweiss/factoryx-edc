@@ -24,14 +24,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "txdc.fullname" . }}-runtime
+  name: {{ include "fxdc.fullname" . }}-runtime
   namespace: {{ .Release.Namespace }}
   {{- with .Values.runtime.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "txdc.runtime.labels" . | nindent 4 }}
+    {{- include "fxdc.runtime.labels" . | nindent 4 }}
     {{- with .Values.runtime.service.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -59,4 +59,4 @@ spec:
       protocol: TCP
       name: public
   selector:
-    {{- include "txdc.runtime.selectorLabels" . | nindent 4 }}
+    {{- include "fxdc.runtime.selectorLabels" . | nindent 4 }}

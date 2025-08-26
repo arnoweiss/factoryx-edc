@@ -24,9 +24,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "txdc.fullname" . }}-test"
+  name: "{{ include "fxdc.fullname" . }}-test"
   labels:
-    {{- include "txdc.runtime.labels" . | nindent 4 }}
+    {{- include "fxdc.runtime.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": {{ .Values.tests.hookDeletePolicy }}
@@ -35,7 +35,7 @@ spec:
     - name: readiness
       image: curlimages/curl
       command: [ 'curl', '--fail' ]
-      args: [ '{{- printf "http://%s-runtime:%v%s/check/readiness" (include "txdc.fullname" $ ) $.Values.runtime.endpoints.default.port $.Values.runtime.endpoints.default.path -}}' ]
+      args: [ '{{- printf "http://%s-runtime:%v%s/check/readiness" (include "fxdc.fullname" $ ) $.Values.runtime.endpoints.default.port $.Values.runtime.endpoints.default.path -}}' ]
     {{/* Try adding a BPN Group to the store via the management API   */}}
     - name: mgmt-api-bpn-store
       image: curlimages/curl
@@ -46,7 +46,7 @@ spec:
                     "@id": "tx:BPN000001234",
                     "tx:groups": ["group1", "group2", "group3"]
                 }' ]
-      args: [ '{{- printf "http://%s-runtime:%v%s/v3/business-partner-groups" (include "txdc.fullname" $ ) $.Values.runtime.endpoints.management.port $.Values.runtime.endpoints.management.path -}}' ]
+      args: [ '{{- printf "http://%s-runtime:%v%s/v3/business-partner-groups" (include "fxdc.fullname" $ ) $.Values.runtime.endpoints.management.port $.Values.runtime.endpoints.management.path -}}' ]
   restartPolicy: Never
   securityContext:
     fsGroup: 101 # curl_group

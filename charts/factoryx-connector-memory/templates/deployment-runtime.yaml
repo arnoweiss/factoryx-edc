@@ -24,16 +24,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "txdc.fullname" . }}
+  name: {{ include "fxdc.fullname" . }}
   labels:
-    {{- include "txdc.runtime.labels" . | nindent 4 }}
+    {{- include "fxdc.runtime.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.runtime.autoscaling.enabled }}
   replicas: {{ .Values.runtime.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "txdc.runtime.selectorLabels" . | nindent 6 }}
+      {{- include "fxdc.runtime.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.runtime.podAnnotations }}
@@ -41,7 +41,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "txdc.runtime.selectorLabels" . | nindent 8 }}
+        {{- include "fxdc.runtime.selectorLabels" . | nindent 8 }}
         {{- with .Values.runtime.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -50,7 +50,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "txdc.serviceAccountName" . }}
+      serviceAccountName: {{ include "fxdc.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.runtime.podSecurityContext | nindent 8 }}
       {{- if or .Values.runtime.initContainers .Values.customCaCerts }}
@@ -208,11 +208,11 @@ spec:
             #########
 
             - name: "EDC_DSP_CALLBACK_ADDRESS"
-              value: {{ printf "%s%s" (include "txdc.runtime.url.protocol" .) .Values.runtime.endpoints.protocol.path | quote }}
+              value: {{ printf "%s%s" (include "fxdc.runtime.url.protocol" .) .Values.runtime.endpoints.protocol.path | quote }}
             - name: "EDC_OAUTH_PROVIDER_AUDIENCE"
               value: "idsc:IDS_CONNECTORS_ALL"
             - name: "EDC_OAUTH_ENDPOINT_AUDIENCE"
-              value: {{ printf "%s%s" (include "txdc.runtime.url.protocol" . ) .Values.runtime.endpoints.protocol.path | quote }}
+              value: {{ printf "%s%s" (include "fxdc.runtime.url.protocol" . ) .Values.runtime.endpoints.protocol.path | quote }}
             - name: "EDC_DCP_V08_FORCED"
               value: "true"
 
@@ -243,7 +243,7 @@ spec:
             ## DATA PLANE ##
             ################
             - name: "EDC_DATAPLANE_API_PUBLIC_BASEURL"
-              value: {{ include "txdc.dataplane.url.public" . }}
+              value: {{ include "fxdc.dataplane.url.public" . }}
 
 
             ##################
@@ -264,7 +264,7 @@ spec:
               value: {{ .Values.runtime.token.refresh.refresh_endpoint }}
             {{- else }}
             - name: "TX_EDC_DATAPLANE_TOKEN_REFRESH_ENDPOINT"
-              value: {{ include "txdc.dataplane.url.public" . }}/token
+              value: {{ include "fxdc.dataplane.url.public" . }}/token
             {{- end}}
 
             - name: "EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS"
@@ -342,7 +342,7 @@ spec:
         {{- if .Values.customCaCerts }}
         - name: custom-cacertificates
           configMap:
-            name: {{ include "txdc.fullname" . }}-custom-cacerts
+            name: {{ include "fxdc.fullname" . }}-custom-cacerts
             defaultMode: 0400
         - name: custom-cacerts
           emptyDir:

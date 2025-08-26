@@ -21,8 +21,8 @@
 #################################################################################
 
 
-{{- $fullName := include "txdc.fullname" . }}
-{{- $controlLabels := include "txdc.runtime.labels" . }}
+{{- $fullName := include "fxdc.fullname" . }}
+{{- $controlLabels := include "fxdc.runtime.labels" . }}
 {{- $controlEdcEndpoints := .Values.runtime.endpoints }}
 {{- $namespace := .Release.Namespace }}
 

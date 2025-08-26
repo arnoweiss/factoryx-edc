@@ -26,14 +26,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "txdc.fullname" . }}-runtime
+  name: {{ include "fxdc.fullname" . }}-runtime
   labels:
-    {{- include "txdc.runtime.labels" . | nindent 4 }}
+    {{- include "fxdc.runtime.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "txdc.fullname" . }}-runtime
+    name: {{ include "fxdc.fullname" . }}-runtime
   minReplicas: {{ .Values.runtime.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.runtime.autoscaling.maxReplicas }}
   metrics:
