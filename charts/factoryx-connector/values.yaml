@@ -243,7 +243,7 @@ controlplane:
   ## Ingress declaration to expose the network service.
   ingresses:
     ## Public / Internet facing Ingress
-    - enabled: true
+    - enabled: false
       # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
       hostname: "edc-control.local"
       # -- Additional ingress annotations to add
@@ -256,7 +256,7 @@ controlplane:
       # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
       tls:
         # -- Enables TLS on the ingress resource
-        enabled: true
+        enabled: false
         # -- If present overwrites the default secret name
         secretName: ""
       ## Adds [cert-manager](https://cert-manager.io/docs/) annotations to the ingress resource
@@ -266,7 +266,7 @@ controlplane:
         # -- If preset enables certificate generation via cert-manager cluster-wide issuer
         clusterIssuer: ""
     ## Private / Intranet facing Ingress
-    - enabled: true
+    - enabled: false
       # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
       hostname: "edc-control.intranet"
       # -- Additional ingress annotations to add
@@ -280,7 +280,7 @@ controlplane:
       # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
       tls:
         # -- Enables TLS on the ingress resource
-        enabled: true
+        enabled: false
         # -- If present overwrites the default secret name
         secretName: ""
       ## Adds [cert-manager](https://cert-manager.io/docs/) annotations to the ingress resource
