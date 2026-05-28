@@ -17,6 +17,5 @@
 #  SPDX-License-Identifier: Apache-2.0
 #################################################################################
 
-org.factoryx.edc.iam.iatp.IatpDefaultScopeExtension
 org.factoryx.edc.iam.iatp.IatpScopeExtractorExtension
 
