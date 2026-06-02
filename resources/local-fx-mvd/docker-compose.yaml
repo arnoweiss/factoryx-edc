@@ -94,8 +94,7 @@ services:
 
   consumer-idhub:
     container_name: consumer-idhub
-    image: ghcr.io/factory-x-contributions/fx-id-hub-charts/identityhub:0.0.2 # Note: image pull requires docker login
-    pull_policy: missing
+    image: docker.io/tractusx/identityhub:sha-847e47d # last tag before release v0.3.0
     depends_on:
       shared-postgres:
         condition: service_healthy
@@ -112,11 +111,12 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1045
       - edc.hostname=consumer-idhub
-      - edc.ih.issuer.demonstrator.scope=org.eclipse.tractusx.vc.type
+      - tx.identityhub.scope.aliases=org.eclipse.tractusx.vc.type,org.factoryx.vc.type
       - edc.iam.did.web.use.https=false
       - edc.ih.api.superuser.id=admin
       - edc.ih.api.superuser.key=YWRtaW4.adminKey
       - web.http.did.port=80
+      - web.http.credentials.path=/api/credentials
       - edc.sql.schema.autocreate=true
       - edc.datasource.default.url=jdbc:postgresql://shared-postgres:5432/cons_ih_db
       - edc.datasource.default.user=admin
@@ -131,8 +131,7 @@ services:
 
   provider-idhub:
     container_name: provider-idhub
-    image: ghcr.io/factory-x-contributions/fx-id-hub-charts/identityhub:0.0.2 # Note: image pull requires docker login
-    pull_policy: missing
+    image: docker.io/tractusx/identityhub:sha-847e47d # last tag before release v0.3.0
     depends_on:
       shared-postgres:
         condition: service_healthy
@@ -149,11 +148,12 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1045
       - edc.hostname=provider-idhub
-      - edc.ih.issuer.demonstrator.scope=org.eclipse.tractusx.vc.type
+      - tx.identityhub.scope.aliases=org.eclipse.tractusx.vc.type,org.factoryx.vc.type
       - edc.iam.did.web.use.https=false
       - edc.ih.api.superuser.id=admin
       - edc.ih.api.superuser.key=YWRtaW4.adminKey
       - web.http.did.port=80
+      - web.http.credentials.path=/api/credentials
       - edc.sql.schema.autocreate=true
       - edc.datasource.default.url=jdbc:postgresql://shared-postgres:5432/prov_ih_db
       - edc.datasource.default.user=admin
@@ -169,7 +169,6 @@ services:
   consumer-controlplane:
     container_name: consumer-controlplane
     image: ghcr.io/factory-x-contributions/edc-controlplane-postgresql-hashicorp-vault:0.4.0-SNAPSHOT
-    pull_policy: missing
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005
       - edc.iam.trusted-issuer.example.id=did:web:local-issuer-service:fx-issuer
@@ -179,6 +178,10 @@ services:
       - edc.iam.sts.oauth.token.url=http://consumer-idhub:9292/api/sts/token
       - edc.iam.sts.oauth.client.id=did:web:consumer-idhub:user:consumer
       - edc.iam.issuer.id=did:web:consumer-idhub:user:consumer
+      # Hint: tx.edc.iam.iatp.* will be changed to tx.edc.iam.dcp.* upstream in Tractus-X with 0.13.0!
+      - tx.edc.iam.iatp.default-scopes.membership.alias=org.factoryx.vc.type
+      - tx.edc.iam.iatp.default-scopes.membership.type=MembershipCredential
+      - tx.edc.iam.iatp.default-scopes.membership.operation=read
       - web.http.port=9000
       - web.http.path=/api
       - web.http.management.port=9010
@@ -265,7 +268,6 @@ services:
   provider-controlplane:
     container_name: provider-controlplane
     image: ghcr.io/factory-x-contributions/edc-controlplane-postgresql-hashicorp-vault:0.4.0-SNAPSHOT
-    pull_policy: missing
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005
       - edc.iam.trusted-issuer.example.id=did:web:local-issuer-service:fx-issuer
@@ -275,6 +277,10 @@ services:
       - edc.iam.sts.oauth.token.url=http://provider-idhub:9292/api/sts/token
       - edc.iam.sts.oauth.client.id=did:web:provider-idhub:user:provider
       - edc.iam.issuer.id=did:web:provider-idhub:user:provider
+      # Hint: tx.edc.iam.iatp.* will be changed to tx.edc.iam.dcp.* upstream in Tractus-X with 0.13.0!
+      - tx.edc.iam.iatp.default-scopes.membership.alias=org.factoryx.vc.type
+      - tx.edc.iam.iatp.default-scopes.membership.type=MembershipCredential
+      - tx.edc.iam.iatp.default-scopes.membership.operation=read
       - web.http.port=9000
       - web.http.path=/api
       - web.http.management.port=9010
